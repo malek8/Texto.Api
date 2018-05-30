@@ -1,8 +1,8 @@
 ﻿namespace Texto.Api.Models
 {
-    public class MessageModel
+    public class SendMessageModel
     {
-        public string Number { get; set; }
+        public string ToNumber { get; set; }
         public string Message { get; set; }
     }
 }
