@@ -1,8 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using System.Threading.Tasks;
-using Texto.Api.Models;
+using Texto.Api.Requests;
 using Twilio;
+using Twilio.AspNet.Common;
+using Twilio.AspNet.Core;
+using Twilio.Exceptions;
 using Twilio.Rest.Api.V2010.Account;
 using static Twilio.Rest.Api.V2010.Account.Call.FeedbackSummaryResource;
 
@@ -18,9 +21,9 @@ namespace Texto.Api.Controllers
             _configuration = configuration;
         }
 
-        [Route("api/v1/[controller]/send")]
         [HttpPost]
-        public async Task<IActionResult> Send([FromBody]SendMessageModel model)
+        [Route("api/v1/[controller]/send")]
+        public async Task<IActionResult> Send([FromBody]SendMessageRequest request)
         {
             var sid = _configuration["TwilioSmsCredentials:Sid"];
             var token = _configuration["TwilioSmsCredentials:Token"];
@@ -28,18 +31,34 @@ namespace Texto.Api.Controllers
 
             TwilioClient.Init(sid, token);
 
-            var messageResource = await MessageResource.CreateAsync(from: new Twilio.Types.PhoneNumber(fromNumber),
-                to: new Twilio.Types.PhoneNumber(model.ToNumber),
-                body: model.Message);
+            try
+            {
+                var messageResource = await MessageResource.CreateAsync(from: new Twilio.Types.PhoneNumber(fromNumber),
+                to: new Twilio.Types.PhoneNumber(request.ToNumber),
+                body: request.Message);
 
-            if (IsMessageSent(messageResource))
-            {
-                return Ok();
+                if (IsMessageSent(messageResource))
+                {
+                    return Ok(messageResource.Sid);
+                }
+                else
+                {
+                    return BadRequest(messageResource.Sid);
+                }
             }
-            else
+            catch(ApiException ex)
             {
-                return BadRequest();
+                //TODO: Log error.
+                return StatusCode(500);
             }
+        }
+
+        [HttpPost]
+        [Route("api/v1/[controller]/receive")]
+        public TwiMLResult Receive(SmsRequest request)
+        {
+            // TODO: save incoming request.
+            return new TwiMLResult();
         }
 
         private bool IsMessageSent(MessageResource messageResource) => messageResource.Status != StatusEnum.Failed;
