@@ -1,41 +1,41 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
-using System.Threading.Tasks;
 using Texto.Api.Requests;
 using Twilio;
 using Twilio.AspNet.Common;
 using Twilio.AspNet.Core;
 using Twilio.Exceptions;
 using Twilio.Rest.Api.V2010.Account;
-using static Twilio.Rest.Api.V2010.Account.Call.FeedbackSummaryResource;
+using Twilio.Rest.Api.V2010.Account.Call;
 
 namespace Texto.Api.Controllers
 {
     [Produces("application/json")]
-    public class MessengerController : Controller
+    [Route("api/[controller]")]
+    public class TextController : Controller
     {
-        private readonly IConfiguration _configuration;
+        private readonly IConfiguration configuration;
 
-        public MessengerController(IConfiguration configuration)
+        public TextController(IConfiguration configuration)
         {
-            _configuration = configuration;
+            this.configuration = configuration;
         }
 
-        [HttpPost]
-        [Route("api/v1/[controller]/send")]
+        [HttpPost("{request}")]
         public async Task<IActionResult> Send([FromBody]SendMessageRequest request)
         {
-            var sid = _configuration["TwilioSmsCredentials:Sid"];
-            var token = _configuration["TwilioSmsCredentials:Token"];
-            var fromNumber = _configuration["TwilioSettings:FromNumber"];
+            var sid = configuration["TwilioSmsCredentials:Sid"];
+            var token = configuration["TwilioSmsCredentials:Token"];
+            var fromNumber = configuration["TwilioSettings:FromNumber"];
 
             TwilioClient.Init(sid, token);
 
             try
             {
                 var messageResource = await MessageResource.CreateAsync(from: new Twilio.Types.PhoneNumber(fromNumber),
-                to: new Twilio.Types.PhoneNumber(request.ToNumber),
-                body: request.Message);
+                    to: new Twilio.Types.PhoneNumber(request.ToNumber),
+                    body: request.Message);
 
                 if (IsMessageSent(messageResource))
                 {
@@ -46,21 +46,20 @@ namespace Texto.Api.Controllers
                     return BadRequest(messageResource.Sid);
                 }
             }
-            catch(ApiException ex)
+            catch (ApiException ex)
             {
                 //TODO: Log error.
                 return StatusCode(500);
             }
         }
 
-        [HttpPost]
-        [Route("api/v1/[controller]/receive")]
+        [HttpPost("{request}")]
         public TwiMLResult Receive(SmsRequest request)
         {
             // TODO: save incoming request.
             return new TwiMLResult();
         }
 
-        private bool IsMessageSent(MessageResource messageResource) => messageResource.Status != StatusEnum.Failed;
+        private static bool IsMessageSent(MessageResource messageResource) => messageResource.Status != FeedbackSummaryResource.StatusEnum.Failed;
     }
 }
