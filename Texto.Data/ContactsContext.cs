@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization;
 using MongoDB.Driver;
@@ -19,17 +20,17 @@ namespace Texto.Data
             Database = client.GetDatabase(settings.DatabaseName);
         }
 
-        public T Get<T>(string id)
+        public async Task<T> Get<T>(string id)
         {
             var filter = Builders<BsonDocument>.Filter.Eq("_id", new ObjectId(id));
 
             try
             {
-                var record = Database.GetCollection<BsonDocument>(CollectionName).Find(filter).FirstOrDefault();
+                var record = await Database.GetCollection<BsonDocument>(CollectionName).FindAsync(filter);
 
                 if (record != null)
                 {
-                    return BsonSerializer.Deserialize<T>(record);
+                    return BsonSerializer.Deserialize<T>(record.FirstOrDefault());
                 }
             }
             catch (Exception ex)
@@ -45,27 +46,28 @@ namespace Texto.Data
             return Database.GetCollection<T>(CollectionName).AsQueryable().Where(predicate);
         }
 
-        public T Add<T>(T item)
+        public async Task<T> Add<T>(T item)
         {
             try
             {
-                Database.GetCollection<T>(CollectionName).InsertOne(item);
+                await Database.GetCollection<T>(CollectionName).InsertOneAsync(item);
             }
             catch (Exception ex)
             {
 
             }
+
             return item;
         }
 
-        public void Update<T>(string id, T item)
+        public async Task Update<T>(string id, T item)
         {
             var filter = Builders<BsonDocument>.Filter.Eq("_id", new ObjectId(id));
             var document = new BsonDocument("$set", item.ToBsonDocument());
 
             try
             {
-                Database.GetCollection<BsonDocument>(CollectionName).UpdateOne(filter, document);
+                await Database.GetCollection<BsonDocument>(CollectionName).UpdateOneAsync(filter, document);
             }
             catch (Exception ex)
             {

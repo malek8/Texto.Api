@@ -9,7 +9,6 @@ using Twilio.AspNet.Core;
 namespace Texto.Api.Controllers
 {
     [Produces("application/json")]
-    //[Route("api/[controller]")]
     public class TextController : Controller
     {
         private readonly IConfiguration configuration;

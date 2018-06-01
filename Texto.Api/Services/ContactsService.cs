@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Threading.Tasks;
 using Texto.Data;
 using Texto.Models;
 
@@ -14,9 +15,9 @@ namespace Texto.Api.Services
             this.Context = context;
         }
 
-        public Contact Get(string id)
+        public async Task<Contact> Get(string id)
         {
-            return Context.Get<Contact>(id);
+            return await Context.Get<Contact>(id);
         }
 
         public Contact GetByPhoneNumber(string phoneNumber)
@@ -24,7 +25,7 @@ namespace Texto.Api.Services
             return Context.Get<Contact>(x => x.Info.Number.Equals(phoneNumber, StringComparison.InvariantCultureIgnoreCase)).FirstOrDefault();
         }
 
-        public string Add(Contact contact)
+        public async Task<string> Add(Contact contact)
         {
             if (contact?.Info == null || string.IsNullOrEmpty(contact.Info.Number))
             {
@@ -34,7 +35,7 @@ namespace Texto.Api.Services
             var existingContact = GetByPhoneNumber(contact.Info.Number);
             if (existingContact == null)
             {
-                Context.Add(contact);
+                await Context.Add(contact);
 
                 return contact.Id;
             }
@@ -42,13 +43,13 @@ namespace Texto.Api.Services
             return existingContact.Id;
         }
 
-        public void SendMessage(string contactId, Message message)
+        public async Task SendMessage(string contactId, Message message)
         {
-            var contact = Get(contactId);
+            var contact = await Get(contactId);
 
             contact.Messages.Add(message);
 
-            Context.Update(contact.Id, contact);
+            await Context.Update(contact.Id, contact);
         }
     }
 }
