@@ -21,7 +21,7 @@ namespace Texto.Data
 
         public T Get<T>(string id)
         {
-            var filter = Builders<BsonDocument>.Filter.Eq("_id", id);
+            var filter = Builders<BsonDocument>.Filter.Eq("_id", new ObjectId(id));
             var record = Database.GetCollection<BsonDocument>(CollectionName).Find(filter).FirstOrDefault();
 
             if (record != null)
@@ -29,7 +29,7 @@ namespace Texto.Data
                 return BsonSerializer.Deserialize<T>(record);
             }
 
-            return (T) new object();
+            return default(T);
         }
 
         public IEnumerable<T> Get<T>(Func<T, bool> predicate)
@@ -45,8 +45,9 @@ namespace Texto.Data
 
         public void Update<T>(string id, T item)
         {
-            var filter = Builders<BsonDocument>.Filter.Eq("_id", id);
-            Database.GetCollection<BsonDocument>(CollectionName).UpdateOne(filter, item.ToBsonDocument());
+            var filter = Builders<BsonDocument>.Filter.Eq("_id", new ObjectId(id));
+            var document = new BsonDocument("$set", item.ToBsonDocument());
+            Database.GetCollection<BsonDocument>(CollectionName).UpdateOne(filter, document);
         }
     }
 }

@@ -17,7 +17,7 @@ namespace Texto.Models
         public Address Address { get; set; }
 
         [BsonElement]
-        public IList<Message> Messages { get; set; }
+        public IList<Message> Messages { get; set; } = new List<Message>();
     }
 
     public class ContactInfo
