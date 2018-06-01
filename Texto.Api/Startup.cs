@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Texto.Api.Services;
 using Texto.Data;
 
 namespace Texto.Api
@@ -20,6 +21,7 @@ namespace Texto.Api
         {
             services.AddTransient<IContextSettings, ContextSettings>();
             services.AddTransient<IContactsContext, ContactsContext>();
+            services.AddTransient<IContactsService, ContactsService>();
 
             services.AddMvc();
         }

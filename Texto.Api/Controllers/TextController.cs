@@ -1,8 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Texto.Api.Requests;
+using Texto.Api.Services;
 using Texto.Data;
 using Texto.Models;
 using Twilio;
@@ -20,11 +22,13 @@ namespace Texto.Api.Controllers
     {
         private readonly IConfiguration configuration;
         private readonly IContactsContext contactsContext;
+        private IContactsService ContactsService { get; }
 
-        public TextController(IConfiguration configuration, IContactsContext contactsContext)
+        public TextController(IConfiguration configuration, IContactsContext contactsContext, IContactsService contactsService)
         {
             this.configuration = configuration;
             this.contactsContext = contactsContext;
+            this.ContactsService = contactsService;
         }
 
         [Route("api/[controller]/send")]
@@ -35,7 +39,7 @@ namespace Texto.Api.Controllers
             var token = configuration["TwilioSmsCredentials:Token"];
             var fromNumber = configuration["TwilioSettings:FromNumber"];
 
-            AddMessage(request);
+            SaveMessage(request);
 
             TwilioClient.Init(sid, token);
 
@@ -69,26 +73,28 @@ namespace Texto.Api.Controllers
             return new TwiMLResult();
         }
 
-        private void AddMessage(SendMessageRequest messageRequest)
+        private void SaveMessage(SendMessageRequest messageRequest)
         {
-            var contact = new Contact
+            var contact = ContactsService.GetByPhoneNumber(messageRequest.ToNumber);
+            if (contact == null)
             {
-                Info = new ContactInfo
+                contact = new Contact
                 {
-                    Number = "+14388060100",
-                    NickName = "Texto.Api"
-                },
-                Messages = new List<Message>()
-                {
-                    new Message
+                    Info = new ContactInfo
                     {
-                        Direction = MessageDirection.Out,
-                        Text = messageRequest.Message
+                        Number = messageRequest.ToNumber
                     }
-                }
-            };
+                };
 
-            contactsContext.Add(contact);
+                ContactsService.Add(contact);
+            }
+
+            ContactsService.SendMessage(contact.Id, new Message
+            {
+                From = messageRequest.FromNumber,
+                Text = messageRequest.Message,
+                CreatedOn = DateTime.UtcNow
+            });
         }
 
         private static bool IsMessageSent(MessageResource messageResource) => messageResource.Status != FeedbackSummaryResource.StatusEnum.Failed;

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 
@@ -6,8 +7,8 @@ namespace Texto.Models
 {
     public class Contact
     {
-        [BsonId]
-        public ObjectId Id { get; set; }
+        [BsonRepresentation(BsonType.ObjectId)]
+        public string Id { get; set; }
 
         [BsonElement]
         public ContactInfo Info { get; set; }
@@ -32,8 +33,9 @@ namespace Texto.Models
         public string Text { get; set; }
         public string Status { get; set; }
         public string Sid { get; set; }
-        public long Order { get; set; }
-        public MessageDirection Direction { get; set; }
+        public DateTime CreatedOn { get; set; }
+        public string From { get; set; }
+        public string Direction { get; set; }
     }
 
     public class Address
@@ -42,5 +44,11 @@ namespace Texto.Models
         public string Province { get; set; }
         public string Country { get; set; }
         public string PostalCode { get; set; }
+    }
+
+    public static class MessageDirection
+    {
+        public static string Incoming => "incoming";
+        public static string Outgoing => "outgoing";
     }
 }
