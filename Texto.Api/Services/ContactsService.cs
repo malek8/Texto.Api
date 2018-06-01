@@ -47,6 +47,7 @@ namespace Texto.Api.Services
             var contact = Get(contactId);
 
             contact.Messages.Add(message);
+
             Context.Update(contact.Id, contact);
         }
     }

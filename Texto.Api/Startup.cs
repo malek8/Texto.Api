@@ -22,6 +22,7 @@ namespace Texto.Api
             services.AddTransient<IContextSettings, ContextSettings>();
             services.AddTransient<IContactsContext, ContactsContext>();
             services.AddTransient<IContactsService, ContactsService>();
+            services.AddTransient<IMessageService, MessageService>();
 
             services.AddMvc();
         }

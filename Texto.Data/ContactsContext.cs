@@ -22,11 +22,19 @@ namespace Texto.Data
         public T Get<T>(string id)
         {
             var filter = Builders<BsonDocument>.Filter.Eq("_id", new ObjectId(id));
-            var record = Database.GetCollection<BsonDocument>(CollectionName).Find(filter).FirstOrDefault();
 
-            if (record != null)
+            try
             {
-                return BsonSerializer.Deserialize<T>(record);
+                var record = Database.GetCollection<BsonDocument>(CollectionName).Find(filter).FirstOrDefault();
+
+                if (record != null)
+                {
+                    return BsonSerializer.Deserialize<T>(record);
+                }
+            }
+            catch (Exception ex)
+            {
+
             }
 
             return default(T);
@@ -39,7 +47,14 @@ namespace Texto.Data
 
         public T Add<T>(T item)
         {
-            Database.GetCollection<T>(CollectionName).InsertOne(item);
+            try
+            {
+                Database.GetCollection<T>(CollectionName).InsertOne(item);
+            }
+            catch (Exception ex)
+            {
+
+            }
             return item;
         }
 
@@ -47,7 +62,15 @@ namespace Texto.Data
         {
             var filter = Builders<BsonDocument>.Filter.Eq("_id", new ObjectId(id));
             var document = new BsonDocument("$set", item.ToBsonDocument());
-            Database.GetCollection<BsonDocument>(CollectionName).UpdateOne(filter, document);
+
+            try
+            {
+                Database.GetCollection<BsonDocument>(CollectionName).UpdateOne(filter, document);
+            }
+            catch (Exception ex)
+            {
+
+            }
         }
     }
 }
