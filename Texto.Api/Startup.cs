@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
+using Texto.Data;
 
 namespace Texto.Api
 {
@@ -23,6 +18,9 @@ namespace Texto.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddTransient<IContextSettings, ContextSettings>();
+            services.AddTransient<IContactsContext, ContactsContext>();
+
             services.AddMvc();
         }
 
@@ -36,5 +34,19 @@ namespace Texto.Api
 
             app.UseMvc();
         }
+    }
+
+    public class ContextSettings : IContextSettings
+    {
+        private readonly IConfiguration configuration;
+
+        public ContextSettings(IConfiguration configuration)
+        {
+            this.configuration = configuration;
+        }
+
+        public string ConnectionString => configuration["Database:ConnectionString"];
+        public string DatabaseName => configuration["Database:Name"];
+        public string CollectionName => "Contacts";
     }
 }
