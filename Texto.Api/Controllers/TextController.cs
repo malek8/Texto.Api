@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Texto.Api.Requests;
@@ -8,20 +9,20 @@ using Twilio.AspNet.Core;
 
 namespace Texto.Api.Controllers
 {
+    [Route("api/[controller]")]
     [Produces("application/json")]
     public class TextController : Controller
     {
-        private readonly IConfiguration configuration;
         private readonly IMessageService messageService;
 
         public TextController(IConfiguration configuration, IMessageService messageService)
         {
-            this.configuration = configuration;
             this.messageService = messageService;
         }
 
-        [Route("api/[controller]/send")]
+        [Route("send")]
         [HttpPost("{request}")]
+        [Authorize]
         public async Task<IActionResult> Send([FromBody]SendMessageRequest request)
         {
             var messageSid = await messageService.Send(request.FromNumber, request.ToNumber, request.Message);
@@ -36,7 +37,7 @@ namespace Texto.Api.Controllers
             }
         }
 
-        [Route("api/[controller]/receive")]
+        [Route("receive")]
         [HttpPost("{request}")]
         public TwiMLResult Receive(SmsRequest request)
         {
