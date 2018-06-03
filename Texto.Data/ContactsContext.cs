@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization;
@@ -41,9 +42,22 @@ namespace Texto.Data
             return default(T);
         }
 
-        public IEnumerable<T> Get<T>(Func<T, bool> predicate)
+        public IEnumerable<T> Get<T>(Expression<Func<T, bool>> predicate)
         {
             return Database.GetCollection<T>(CollectionName).AsQueryable().Where(predicate);
+        }
+
+        public async Task<T> GetByPhoneNumber<T>(string number)
+        {
+            var filter = Builders<BsonDocument>.Filter.Eq("Info.Number", number);
+            var record = await Database.GetCollection<BsonDocument>(CollectionName).FindAsync(filter);
+
+            if (record != null)
+            {
+                return BsonSerializer.Deserialize<T>(record.FirstOrDefault());
+            }
+
+            return default(T);
         }
 
         public async Task<T> Add<T>(T item)

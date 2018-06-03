@@ -8,11 +8,14 @@ namespace Texto.Api.Services
     {
         Task<Contact> Get(string id);
 
-        Contact GetByPhoneNumber(string phoneNumber);
+        Task<Contact> GetByPhoneNumber(string phoneNumber);
 
         Task<string> Add(Contact contact);
 
-        Task SendMessage(string contactId, Message message);
+        Task AddMessage(string contactId, Message message);
+
+        Task UpdateAddress(string contactId, Address address);
+
 
     }
 }

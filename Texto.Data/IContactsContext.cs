@@ -9,7 +9,9 @@ namespace Texto.Data
     {
         Task<T> Get<T>(string id);
 
-        IEnumerable<T> Get<T>(Func<T, bool> predicate);
+        IEnumerable<T> Get<T>(Expression<Func<T, bool>> predicate);
+
+        Task<T> GetByPhoneNumber<T>(string number);
 
         Task<T> Add<T>(T item);
 

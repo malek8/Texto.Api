@@ -14,10 +14,12 @@ namespace Texto.Api.Controllers
     public class TextController : Controller
     {
         private readonly IMessageService messageService;
+        private readonly IConfiguration configuration;
 
         public TextController(IConfiguration configuration, IMessageService messageService)
         {
             this.messageService = messageService;
+            this.configuration = configuration;
         }
 
         [Route("send")]
@@ -39,9 +41,17 @@ namespace Texto.Api.Controllers
 
         [Route("receive")]
         [HttpPost("{request}")]
-        public TwiMLResult Receive(SmsRequest request)
+        public async Task<TwiMLResult> Receive(SmsRequest request)
         {
-            // TODO: save incoming request.
+            var receivingKey = configuration["Settings:ReceivingKey"];
+            if (Request.Query.ContainsKey("key"))
+            {
+                if (Request.Query["key"][0].Equals(receivingKey))
+                {
+                    await messageService.Receive(request);
+                }
+            }
+
             return new TwiMLResult();
         }
     }

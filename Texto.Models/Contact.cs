@@ -31,10 +31,10 @@ namespace Texto.Models
     public class Message
     {
         public string Text { get; set; }
-        public string Status { get; set; }
         public string Sid { get; set; }
         public DateTime CreatedOn { get; set; }
         public string From { get; set; }
+        public string To { get; set; }
         public string Direction { get; set; }
     }
 

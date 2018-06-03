@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 using Texto.Models;
 using Twilio;
+using Twilio.AspNet.Common;
 using Twilio.Exceptions;
 using Twilio.Rest.Api.V2010.Account;
 using Twilio.Rest.Api.V2010.Account.Call;
@@ -36,7 +37,7 @@ namespace Texto.Api.Services
                     to: new PhoneNumber(toNumber),
                     body: text);
 
-                SaveMessage(fromNumber, toNumber, text, messageResource);
+                await AddMessage(fromNumber, toNumber, text, messageResource.Sid, MessageDirection.Incoming);
 
                 if (messageResource.Status != FeedbackSummaryResource.StatusEnum.Failed)
                 {
@@ -50,9 +51,21 @@ namespace Texto.Api.Services
             return string.Empty;
         }
 
-        private void SaveMessage(string fromNumber, string toNumber, string text, MessageResource messageResource)
+        public async Task Receive(SmsRequest request)
         {
-            var contact = contactsService.GetByPhoneNumber(toNumber);
+            await AddMessage(request.To, request.From, request.Body, request.SmsSid, MessageDirection.Outgoing,
+                new Address
+                {
+                    City = request.FromCity,
+                    Province = request.FromState,
+                    Country = request.FromCountry,
+                    PostalCode = request.FromZip
+                });
+        }
+
+        private async Task AddMessage(string fromNumber, string toNumber, string text, string messageSid, string direction, Address address = null)
+        {
+            var contact = await contactsService.GetByPhoneNumber(toNumber);
             if (contact == null)
             {
                 contact = new Contact
@@ -63,17 +76,22 @@ namespace Texto.Api.Services
                     }
                 };
 
-                contactsService.Add(contact);
+                await contactsService.Add(contact);
             }
 
-            contactsService.SendMessage(contact.Id, new Message
+            if (address != null)
+            {
+                await contactsService.UpdateAddress(contact.Id, address);
+            }
+
+            await contactsService.AddMessage(contact.Id, new Message
             {
                 From = fromNumber,
+                To = toNumber,
                 Text = text,
                 CreatedOn = DateTime.UtcNow,
-                Direction = MessageDirection.Incoming,
-                Sid = messageResource.Sid,
-                Status = messageResource.Status == FeedbackSummaryResource.StatusEnum.Failed ? "failed" : "sent"
+                Direction = direction,
+                Sid = messageSid
             });
         }
     }
