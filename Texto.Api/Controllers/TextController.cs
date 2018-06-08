@@ -33,10 +33,8 @@ namespace Texto.Api.Controllers
             {
                 return BadRequest();
             }
-            else
-            {
-                return Ok(messageSid);
-            }
+
+            return Ok(messageSid);
         }
 
         [Route("receive")]
