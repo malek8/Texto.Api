@@ -9,7 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Texto.Models", "Texto.Model
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Texto.Data", "Texto.Data\Texto.Data.csproj", "{CF2FFAF8-A9C2-4B4C-B076-F94F4A6CEBDB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Text.Client", "Text.Client\Text.Client.csproj", "{E123D781-92B6-4D5C-A7F5-980654F376BA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Texto.Client", "Text.Client\Texto.Client.csproj", "{E123D781-92B6-4D5C-A7F5-980654F376BA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
