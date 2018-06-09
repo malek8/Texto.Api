@@ -10,7 +10,7 @@ namespace Texto.Api.Services
 
         public ContactsService(IContactsContext context)
         {
-            this.Context = context;
+            Context = context;
         }
 
         public async Task<Contact> Get(string id)

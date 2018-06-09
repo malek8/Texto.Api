@@ -1,9 +1,12 @@
-﻿using System.Net.Http;
+﻿using System.Net;
+using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Azure.ServiceBus;
 using Newtonsoft.Json;
 using Texto.Api.Services;
 using Texto.Models;
@@ -50,6 +53,13 @@ namespace Texto.Api.Controllers
                 if (Request.Query["key"][0].Equals(receivingKey))
                 {
                     await messageService.Receive(request);
+
+                    var queueClient = new QueueClient(configuration["AzureBus:ConnectionString"], configuration["AzureBus:QueueName"]);
+                    await queueClient.SendAsync(new Microsoft.Azure.ServiceBus.Message
+                    {
+                        To = "textBrokers",
+                        Body = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(request))
+                    });
                 }
             }
 
@@ -72,17 +82,12 @@ namespace Texto.Api.Controllers
                 audience = identifier
             };
 
-            var response = await httpClient.PostAsJsonAsync("https://texto.auth0.com/oauth/token", requestContent);
+            var response = await httpClient.PostAsJsonAsync($"https://{configuration["Auth0:Domain"]}/oauth/token", requestContent);
             var responseContent = await response.Content.ReadAsStringAsync();
 
             var tokenObject = JsonConvert.DeserializeObject<dynamic>(responseContent);
 
-            if (tokenObject == null)
-            {
-                return StatusCode(401);
-            }
-
-            return Ok(tokenObject.access_token);
+            return tokenObject == null ? StatusCode((int)HttpStatusCode.Unauthorized) : (IActionResult) Ok(tokenObject.access_token);
         }
     }
 }

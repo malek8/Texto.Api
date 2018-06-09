@@ -13,17 +13,15 @@ namespace Texto.Api.Services
 {
     public class MessageService : IMessageService
     {
-        private readonly IConfiguration configuration;
         private readonly IContactsService contactsService;
         private readonly string sid;
         private readonly string token;
 
         public MessageService(IConfiguration configuration, IContactsService contactsService)
         {
-            this.configuration = configuration;
             this.contactsService = contactsService;
 
-            sid = this.configuration["TwilioSmsCredentials:Sid"];
+            sid = configuration["TwilioSmsCredentials:Sid"];
             token = configuration["TwilioSmsCredentials:Token"];
         }
 
