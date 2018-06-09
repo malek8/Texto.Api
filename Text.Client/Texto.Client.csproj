@@ -10,8 +10,4 @@
     <PackageReference Include="Microsoft.AspNet.WebApi.Client" Version="5.2.6" />
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\Texto.Models\Texto.Models.csproj" />
-  </ItemGroup>
-
 </Project>

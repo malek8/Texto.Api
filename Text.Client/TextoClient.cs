@@ -1,7 +1,6 @@
 ﻿using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
-using Texto.Models;
 
 namespace Texto.Client
 {
@@ -30,11 +29,17 @@ namespace Texto.Client
             return httpClient.PostAsJsonAsync($"{baseUri}/api/token", tokenRequest);
         }
 
-        public Task Send(SendMessageRequest message)
+        public Task Send(string fromNumber, string toNumber, string message)
         {
             SetupHeaders();
 
-            return httpClient.PostAsJsonAsync($"{baseUri}/api/text/send", message);
+            var messageRequest = new
+            {
+                FromNumber = fromNumber,
+                ToNumber = toNumber,
+                Message = message
+            };
+            return httpClient.PostAsJsonAsync($"{baseUri}/api/text/send", messageRequest);
         }
 
         private void SetupHeaders()
