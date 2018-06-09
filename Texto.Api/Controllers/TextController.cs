@@ -1,14 +1,12 @@
 ﻿using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
-using System.Web;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
-using MongoDB.Bson;
 using Newtonsoft.Json;
-using Texto.Api.Requests;
 using Texto.Api.Services;
+using Texto.Models;
 using Twilio.AspNet.Common;
 using Twilio.AspNet.Core;
 

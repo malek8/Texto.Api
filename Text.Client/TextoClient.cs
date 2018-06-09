@@ -1,7 +1,7 @@
 ﻿using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
-using Texto.Api.Requests;
+using Texto.Models;
 
 namespace Texto.Client
 {
