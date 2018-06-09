@@ -5,7 +5,7 @@ using Texto.Models;
 
 namespace Texto.Client
 {
-    public class TextoClient
+    public class TextoClient : ITextoClient
     {
         private readonly string baseUri;
         private readonly HttpClient httpClient;
