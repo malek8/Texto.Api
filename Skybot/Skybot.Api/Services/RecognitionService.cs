@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.Web;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
-using Skybot.Api.Models;
+using Skybot.Models.Skybot;
 
 namespace Skybot.Api.Services
 {
