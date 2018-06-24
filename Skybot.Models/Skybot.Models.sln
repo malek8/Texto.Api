@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27703.2035
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Skybot.Models", "Skybot.Models\Skybot.Models.csproj", "{CEB4DC5F-0954-48E1-878D-1A9D7C128999}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{CEB4DC5F-0954-48E1-878D-1A9D7C128999}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CEB4DC5F-0954-48E1-878D-1A9D7C128999}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CEB4DC5F-0954-48E1-878D-1A9D7C128999}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CEB4DC5F-0954-48E1-878D-1A9D7C128999}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {ABC5FEA5-F8E7-43FF-AC57-8491EEDB78B3}
+	EndGlobalSection
+EndGlobal
