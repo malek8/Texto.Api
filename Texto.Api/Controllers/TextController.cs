@@ -1,12 +1,10 @@
 ﻿using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
-using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Azure.ServiceBus;
 using Newtonsoft.Json;
 using Texto.Api.Services;
 using Texto.Models;
@@ -20,12 +18,14 @@ namespace Texto.Api.Controllers
     public class TextController : Controller
     {
         private readonly IMessageService messageService;
+        private readonly IBusService busService;
         private readonly IConfiguration configuration;
 
-        public TextController(IConfiguration configuration, IMessageService messageService)
+        public TextController(IConfiguration configuration, IMessageService messageService, IBusService busService)
         {
             this.messageService = messageService;
             this.configuration = configuration;
+            this.busService = busService;
         }
 
         [Route("send")]
@@ -53,13 +53,7 @@ namespace Texto.Api.Controllers
                 if (Request.Query["key"][0].Equals(receivingKey))
                 {
                     await messageService.Receive(request);
-
-                    var queueClient = new QueueClient(configuration["AzureBus:ConnectionString"], configuration["AzureBus:QueueName"]);
-                    await queueClient.SendAsync(new Microsoft.Azure.ServiceBus.Message
-                    {
-                        To = "textBrokers",
-                        Body = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(request))
-                    });
+                    await busService.PublishAsync(request);
                 }
             }
 
