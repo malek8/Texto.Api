@@ -9,8 +9,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Texto.Models", "Texto.Model
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Texto.Data", "Texto.Data\Texto.Data.csproj", "{CF2FFAF8-A9C2-4B4C-B076-F94F4A6CEBDB}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Texto.Client", "Text.Client\Texto.Client.csproj", "{E123D781-92B6-4D5C-A7F5-980654F376BA}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -29,10 +27,6 @@ Global
 		{CF2FFAF8-A9C2-4B4C-B076-F94F4A6CEBDB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CF2FFAF8-A9C2-4B4C-B076-F94F4A6CEBDB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CF2FFAF8-A9C2-4B4C-B076-F94F4A6CEBDB}.Release|Any CPU.Build.0 = Release|Any CPU
-		{E123D781-92B6-4D5C-A7F5-980654F376BA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E123D781-92B6-4D5C-A7F5-980654F376BA}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E123D781-92B6-4D5C-A7F5-980654F376BA}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E123D781-92B6-4D5C-A7F5-980654F376BA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
