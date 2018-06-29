@@ -24,6 +24,7 @@ namespace Texto.Api
             services.AddTransient<IContactsContext, ContactsContext>();
             services.AddTransient<IContactsService, ContactsService>();
             services.AddTransient<IMessageService, MessageService>();
+            services.AddTransient<IBusService, BusService>();
 
             services.AddAuthentication(options =>
             {
