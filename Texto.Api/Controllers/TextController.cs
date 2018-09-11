@@ -8,9 +8,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using Texto.Api.Services;
-using Texto.Models;
 using Twilio.AspNet.Common;
 using Twilio.AspNet.Core;
+using Texto.Api.Models;
 
 namespace Texto.Api.Controllers
 {
