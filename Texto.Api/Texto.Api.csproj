@@ -28,7 +28,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Texto.Data\Texto.Data.csproj" />
     <ProjectReference Include="..\Texto.Models\Texto.Models.csproj" />
   </ItemGroup>
 
