@@ -5,6 +5,7 @@
     <UserSecretsId>2e2bff15-c3b6-4f83-80f3-c8493a19d225</UserSecretsId>
     <ApplicationInsightsResourceId>/subscriptions/cc78f9b3-c247-4f73-9782-6ff285c44f79/resourcegroups/Default-ApplicationInsights-EastUS/providers/microsoft.insights/components/Texto.Api</ApplicationInsightsResourceId>
     <ApplicationInsightsAnnotationResourceId>/subscriptions/cc78f9b3-c247-4f73-9782-6ff285c44f79/resourcegroups/Default-ApplicationInsights-EastUS/providers/microsoft.insights/components/Texto.Api</ApplicationInsightsAnnotationResourceId>
+    <DockerTargetOS>Linux</DockerTargetOS>
   </PropertyGroup>
 
   <ItemGroup>
@@ -16,6 +17,7 @@
     <PackageReference Include="Microsoft.AspNetCore.All" Version="2.1.1" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="2.1.1" />
     <PackageReference Include="Microsoft.Azure.ServiceBus" Version="3.1.0-preview" />
+    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.0.1916590" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.1.1" />
     <PackageReference Include="MongoDB.Driver" Version="2.7.0" />
     <PackageReference Include="Skybot.Models" Version="2018.6.25.1" />
