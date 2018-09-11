@@ -53,7 +53,7 @@ namespace Texto.Api.Controllers
             {
                 if (Request.Query["key"][0].Equals(receivingKey))
                 {
-                    var authorizedNumbers = _configuration.GetSection("AuthorizedNumbers").Get<string[]>();
+                    var authorizedNumbers = _configuration.GetSection("AuthorizedNumbers:Numbers").Get<string[]>();
 
                     if (authorizedNumbers.Contains(request.From))
                     {
