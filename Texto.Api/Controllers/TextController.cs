@@ -17,15 +17,15 @@ namespace Texto.Api.Controllers
     [Produces("application/json")]
     public class TextController : Controller
     {
-        private readonly IMessageService messageService;
-        private readonly IBusService busService;
-        private readonly IConfiguration configuration;
+        private readonly IMessageService _messageService;
+        private readonly IBusService _busService;
+        private readonly IConfiguration _configuration;
 
         public TextController(IConfiguration configuration, IMessageService messageService, IBusService busService)
         {
-            this.messageService = messageService;
-            this.configuration = configuration;
-            this.busService = busService;
+            _messageService = messageService;
+            _configuration = configuration;
+            _busService = busService;
         }
 
         [Route("send")]
@@ -33,7 +33,7 @@ namespace Texto.Api.Controllers
         [Authorize]
         public async Task<IActionResult> Send([FromBody]SendMessageRequest request)
         {
-            var messageSid = await messageService.Send(request.FromNumber, request.ToNumber, request.Message);
+            var messageSid = await _messageService.Send(request.FromNumber, request.ToNumber, request.Message);
 
             if (string.IsNullOrEmpty(messageSid))
             {
@@ -47,13 +47,13 @@ namespace Texto.Api.Controllers
         [HttpPost("{request}")]
         public async Task<TwiMLResult> Receive(SmsRequest request)
         {
-            var receivingKey = configuration["Settings:ReceivingKey"];
+            var receivingKey = _configuration["Settings:ReceivingKey"];
             if (Request.Query.ContainsKey("key"))
             {
                 if (Request.Query["key"][0].Equals(receivingKey))
                 {
-                    await messageService.Receive(request);
-                    await busService.PublishAsync(request);
+                    await _messageService.Receive(request);
+                    await _busService.PublishAsync(request);
                 }
             }
 
@@ -76,7 +76,7 @@ namespace Texto.Api.Controllers
                 audience = identifier
             };
 
-            var response = await httpClient.PostAsJsonAsync($"https://{configuration["Auth0:Domain"]}/oauth/token", requestContent);
+            var response = await httpClient.PostAsJsonAsync($"https://{_configuration["Auth0:Domain"]}/oauth/token", requestContent);
             var responseContent = await response.Content.ReadAsStringAsync();
 
             var tokenObject = JsonConvert.DeserializeObject<dynamic>(responseContent);
