@@ -13,21 +13,21 @@ namespace Texto.Api.Services
 {
     public class MessageService : IMessageService
     {
-        private readonly IContactsService contactsService;
-        private readonly string sid;
-        private readonly string token;
+        private readonly IContactsService _contactsService;
+        private readonly string _sid;
+        private readonly string _token;
 
         public MessageService(IConfiguration configuration, IContactsService contactsService)
         {
-            this.contactsService = contactsService;
+            _contactsService = contactsService;
 
-            sid = configuration["TwilioSmsCredentials:Sid"];
-            token = configuration["TwilioSmsCredentials:Token"];
+            _sid = configuration["TwilioSmsCredentials:Sid"];
+            _token = configuration["TwilioSmsCredentials:Token"];
         }
 
         public async Task<string> Send(string fromNumber, string toNumber, string text)
         {
-            TwilioClient.Init(sid, token);
+            TwilioClient.Init(_sid, _token);
 
             try
             {
@@ -63,7 +63,7 @@ namespace Texto.Api.Services
 
         private async Task AddMessage(string fromNumber, string toNumber, string text, string messageSid, string direction, Address address = null)
         {
-            var contact = await contactsService.GetByPhoneNumber(toNumber);
+            var contact = await _contactsService.GetByPhoneNumber(toNumber);
             if (contact == null)
             {
                 contact = new Contact
@@ -74,15 +74,15 @@ namespace Texto.Api.Services
                     }
                 };
 
-                await contactsService.Add(contact);
+                await _contactsService.Add(contact);
             }
 
             if (address != null)
             {
-                await contactsService.UpdateAddress(contact.Id, address);
+                await _contactsService.UpdateAddress(contact.Id, address);
             }
 
-            await contactsService.AddMessage(contact.Id, new Message
+            await _contactsService.AddMessage(contact.Id, new Message
             {
                 From = fromNumber,
                 To = toNumber,

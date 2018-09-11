@@ -8,16 +8,16 @@ namespace Texto.Api.Services
 {
     public class BusService : IBusService
     {
-        private readonly IConfiguration configuration;
+        private readonly IConfiguration _configuration;
 
         public BusService(IConfiguration configuration)
         {
-            this.configuration = configuration;
+            _configuration = configuration;
         }
 
         public Task PublishAsync<T>(T item)
         {
-            var queueClient = new QueueClient(configuration["AzureBus:ConnectionString"], configuration["AzureBus:QueueName"]);
+            var queueClient = new QueueClient(_configuration["AzureBus:ConnectionString"], _configuration["AzureBus:QueueName"]);
             return queueClient.SendAsync(new Message
             {
                 To = "textBrokers",
