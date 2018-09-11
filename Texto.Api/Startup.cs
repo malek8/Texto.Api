@@ -22,9 +22,9 @@ namespace Texto.Api
         {
             services.AddTransient<IContextSettings, ContextSettings>();
             services.AddTransient<IContactsContext, ContactsContext>();
-            services.AddTransient<IContactsService, ContactsService>();
-            services.AddTransient<IMessageService, MessageService>();
-            services.AddTransient<IBusService, BusService>();
+
+            services.AddSingleton<IMessageService, MessageService>();
+            services.AddSingleton<IBusService, BusService>();
 
             services.AddAuthentication(options =>
             {
@@ -55,15 +55,15 @@ namespace Texto.Api
 
     public class ContextSettings : IContextSettings
     {
-        private readonly IConfiguration configuration;
+        private readonly IConfiguration _configuration;
 
         public ContextSettings(IConfiguration configuration)
         {
-            this.configuration = configuration;
+            _configuration = configuration;
         }
 
-        public string ConnectionString => configuration["Database:ConnectionString"];
-        public string DatabaseName => configuration["Database:Name"];
+        public string ConnectionString => _configuration["Database:ConnectionString"];
+        public string DatabaseName => _configuration["Database:Name"];
         public string CollectionName => "Contacts";
     }
 }

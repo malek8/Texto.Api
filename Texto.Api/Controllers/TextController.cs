@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
@@ -52,12 +53,16 @@ namespace Texto.Api.Controllers
             {
                 if (Request.Query["key"][0].Equals(receivingKey))
                 {
-                    await _messageService.Receive(request);
-                    await _busService.PublishAsync(request);
+                    var authorizedNumbers = _configuration.GetSection("AuthorizedNumbers").Get<string[]>();
+
+                    if (authorizedNumbers.Contains(request.From))
+                    {
+                        await _busService.PublishAsync(request.Body);
+                        return new TwiMLResult();
+                    }
                 }
             }
-
-            return new TwiMLResult();
+            return new TwiMLResult("Error");
         }
 
         [AllowAnonymous]
