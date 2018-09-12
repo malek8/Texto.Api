@@ -262,3 +262,4 @@ __pycache__/
 
 # App Settings
 Texto.Api/appsettings.Development.json
+.env

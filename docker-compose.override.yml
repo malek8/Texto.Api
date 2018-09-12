@@ -1,0 +1,17 @@
+version: '3.4'
+
+services:
+  texto.api:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - Auth0__Domain=${Auth0__Domain}
+      - Auth0__ApiIdentifier=${Auth0__ApiIdentifier}
+      - Settings__SystemNumberA=${Settings__SystemNumberA}
+      - Settings__ReceivingKey=${Settings__ReceivingKey}
+      - TwilioSmsCredentials__Sid=${TwilioSmsCredentials__Sid}
+      - TwilioSmsCredentials__Token=${TwilioSmsCredentials__Token}
+      - AzureBus__ConnectionString=${AzureBus__ConnectionString}
+      - AzureBus__QueueName=${AzureBus__QueueName}
+      - AuthorizedNumbers__Numbers__0=${AuthorizedNumbers__Numbers__0}
+    ports:
+      - "80"

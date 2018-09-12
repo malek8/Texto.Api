@@ -6,6 +6,7 @@
     <ApplicationInsightsResourceId>/subscriptions/cc78f9b3-c247-4f73-9782-6ff285c44f79/resourcegroups/Default-ApplicationInsights-EastUS/providers/microsoft.insights/components/Texto.Api</ApplicationInsightsResourceId>
     <ApplicationInsightsAnnotationResourceId>/subscriptions/cc78f9b3-c247-4f73-9782-6ff285c44f79/resourcegroups/Default-ApplicationInsights-EastUS/providers/microsoft.insights/components/Texto.Api</ApplicationInsightsAnnotationResourceId>
     <DockerTargetOS>Linux</DockerTargetOS>
+    <DockerComposeProjectPath>..\docker-compose.dcproj</DockerComposeProjectPath>
   </PropertyGroup>
 
   <ItemGroup>

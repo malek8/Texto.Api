@@ -1,0 +1,8 @@
+version: '3.4'
+
+services:
+  texto.api:
+    image: ${DOCKER_REGISTRY}/texto.api
+    build:
+      context: .
+      dockerfile: Texto.Api/Dockerfile
