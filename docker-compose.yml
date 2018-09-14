@@ -6,3 +6,15 @@ services:
     build:
       context: .
       dockerfile: Texto.Api/Dockerfile
+    ports:
+      - "80"
+    environment:
+      - Auth0__Domain
+      - Auth0__ApiIdentifier
+      - Settings__SystemNumberA
+      - Settings__ReceivingKey
+      - TwilioSmsCredentials__Sid
+      - TwilioSmsCredentials__Token
+      - AzureBus__ConnectionString
+      - AzureBus__QueueName
+      - AuthorizedNumbers__Numbers__0
