@@ -21,19 +21,5 @@ namespace Texto.Api.Controllers
         {
             return Ok("I'm doing okay");
         }
-
-        [AllowAnonymous]
-        [HttpGet, Route("say1")]
-        public IActionResult Say()
-        {
-            return Ok($"{_configuration["Say1"]}");
-        }
-
-        [AllowAnonymous]
-        [HttpGet, Route("say2")]
-        public IActionResult Say2()
-        {
-            return Ok($"{_configuration["Words:Say2"]}");
-        }
     }
 }
