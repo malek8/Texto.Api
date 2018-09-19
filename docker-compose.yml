@@ -9,6 +9,7 @@ services:
     ports:
       - "80"
     environment:
+      - DOCKER_REGISTRY
       - Auth0__Domain
       - Auth0__ApiIdentifier
       - Settings__SystemNumberA
