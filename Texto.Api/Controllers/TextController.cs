@@ -1,16 +1,14 @@
 ﻿using System.Linq;
 using System.Net;
-using System.Net.Http;
-using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
-using Newtonsoft.Json;
 using Texto.Api.Services;
 using Twilio.AspNet.Common;
 using Twilio.AspNet.Core;
 using Texto.Api.Models;
+using IAuthorizationService = Texto.Api.Services.IAuthorizationService;
 
 namespace Texto.Api.Controllers
 {
@@ -20,13 +18,15 @@ namespace Texto.Api.Controllers
     {
         private readonly IMessageService _messageService;
         private readonly IBusService _busService;
+        private readonly IAuthorizationService _authorizationService;
         private readonly IConfiguration _configuration;
 
-        public TextController(IConfiguration configuration, IMessageService messageService, IBusService busService)
+        public TextController(IConfiguration configuration, IMessageService messageService, IBusService busService, IAuthorizationService authorizationService)
         {
             _messageService = messageService;
             _configuration = configuration;
             _busService = busService;
+            _authorizationService = authorizationService;
         }
 
         [Route("send")]
@@ -70,23 +70,9 @@ namespace Texto.Api.Controllers
         [HttpPost]
         public async Task<IActionResult> RequestToken(string clientId, string clientSecret, string identifier)
         {
-            var httpClient = new HttpClient();
+            var token = await _authorizationService.RequestToken(clientId, clientSecret, identifier);
 
-            httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-            var requestContent = new
-            {
-                grant_type = "client_credentials",
-                client_id = clientId,
-                client_secret = clientSecret,
-                audience = identifier
-            };
-
-            var response = await httpClient.PostAsJsonAsync($"https://{_configuration["Auth0:Domain"]}/oauth/token", requestContent);
-            var responseContent = await response.Content.ReadAsStringAsync();
-
-            var tokenObject = JsonConvert.DeserializeObject<dynamic>(responseContent);
-
-            return tokenObject == null ? StatusCode((int)HttpStatusCode.Unauthorized) : (IActionResult) Ok(tokenObject.access_token);
+            return token == null ? StatusCode((int) HttpStatusCode.Unauthorized) : (IActionResult) Ok(token);
         }
     }
 }

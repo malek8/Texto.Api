@@ -21,6 +21,7 @@ namespace Texto.Api
         {
             services.AddSingleton<IMessageService, MessageService>();
             services.AddSingleton<IBusService, BusService>();
+            services.AddSingleton<IAuthorizationService, AuthorizationService>();
 
             services.AddAuthentication(options =>
             {
