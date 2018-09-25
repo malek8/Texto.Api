@@ -10,8 +10,6 @@ services:
       - "80"
     environment:
       - DOCKER_REGISTRY
-      - Auth0__Domain
-      - Auth0__ApiIdentifier
       - Settings__SystemNumberA
       - Settings__ReceivingKey
       - TwilioSmsCredentials__Sid
@@ -19,3 +17,4 @@ services:
       - AzureBus__ConnectionString
       - AzureBus__QueueName
       - AuthorizedNumbers__Numbers__0
+      - Authority
