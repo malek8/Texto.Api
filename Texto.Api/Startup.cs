@@ -26,7 +26,6 @@ namespace Texto.Api
                 .AddIdentityServerAuthentication(options =>
                 {
                     options.Authority = Configuration["Authority"];
-                    options.RequireHttpsMetadata = false;
                     options.ApiName = "Texto.Api";
                 });
 
