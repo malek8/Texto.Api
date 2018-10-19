@@ -57,7 +57,13 @@ namespace Texto.Api.Controllers
 
                     if (authorizedNumbers.Contains(request.From))
                     {
-                        await _busService.PublishAsync(request.Body);
+                        var message = new
+                        {
+                            request.From,
+                            request.To,
+                            request.Body
+                        };
+                        await _busService.PublishAsync(message);
                         return new TwiMLResult();
                     }
                 }
