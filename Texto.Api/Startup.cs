@@ -27,6 +27,7 @@ namespace Texto.Api
                 {
                     options.Authority = Configuration["Authority"];
                     options.ApiName = "Texto.Api";
+                    options.RequireHttpsMetadata = false;
                 });
 
             services.AddMvc();
