@@ -1,9 +1,10 @@
 ﻿using System.Linq;
-using System.Net;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using Texto.Api.Services;
 using Twilio.AspNet.Common;
 using Twilio.AspNet.Core;
@@ -20,13 +21,17 @@ namespace Texto.Api.Controllers
         private readonly IBusService _busService;
         private readonly IAuthorizationService _authorizationService;
         private readonly IConfiguration _configuration;
+        private readonly ILogger<TextController> _logger;
 
-        public TextController(IConfiguration configuration, IMessageService messageService, IBusService busService, IAuthorizationService authorizationService)
+        public TextController(IConfiguration configuration, IMessageService messageService,
+            IBusService busService, IAuthorizationService authorizationService,
+            ILogger<TextController> logger)
         {
             _messageService = messageService;
             _configuration = configuration;
             _busService = busService;
             _authorizationService = authorizationService;
+            _logger = logger;
         }
 
         [Route("send")]
@@ -38,7 +43,8 @@ namespace Texto.Api.Controllers
 
             if (string.IsNullOrEmpty(messageSid))
             {
-                return BadRequest();
+                _logger.LogWarning("Message was not sent");
+                return StatusCode(StatusCodes.Status500InternalServerError);
             }
 
             return Ok(messageSid);
@@ -66,8 +72,12 @@ namespace Texto.Api.Controllers
                         await _busService.PublishAsync(message);
                         return new TwiMLResult();
                     }
+
+                    _logger.LogInformation($"Received message from unauthorized number {request.From} - Country: {request.FromCountry} - Message: {request.Body}");
                 }
             }
+
+            _logger.LogWarning("Unauthorized receive request");
             return new TwiMLResult("Error");
         }
 
@@ -78,7 +88,7 @@ namespace Texto.Api.Controllers
         {
             var token = await _authorizationService.RequestToken(clientId, clientSecret, identifier);
 
-            return token == null ? StatusCode((int) HttpStatusCode.Unauthorized) : (IActionResult) Ok(token);
+            return token == null ? StatusCode(StatusCodes.Status401Unauthorized) : (IActionResult) Ok(token);
         }
     }
 }
