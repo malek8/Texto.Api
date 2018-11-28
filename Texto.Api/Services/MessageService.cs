@@ -11,20 +11,19 @@ namespace Texto.Api.Services
 {
     public class MessageService : IMessageService
     {
-        private readonly string _sid;
-        private readonly string _token;
         private readonly ILogger<MessageService> _logger;
+        private readonly IConfiguration _configuration;
 
         public MessageService(IConfiguration configuration, ILogger<MessageService> logger)
         {
-            _sid = configuration["TwilioSmsCredentials:Sid"];
-            _token = configuration["TwilioSmsCredentials:Token"];
+            _configuration = configuration;
             _logger = logger;
         }
 
         public async Task<string> Send(string fromNumber, string toNumber, string text)
         {
-            TwilioClient.Init(_sid, _token);
+            var twilioSettings = _configuration.GetSection("TwilioSettings");
+            TwilioClient.Init(twilioSettings["Sid"], twilioSettings["Token"]);
 
             try
             {
