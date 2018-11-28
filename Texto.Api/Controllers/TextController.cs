@@ -1,13 +1,10 @@
-﻿using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Texto.Api.Services;
-using Twilio.AspNet.Common;
-using Twilio.AspNet.Core;
 using Texto.Api.Models;
 using IAuthorizationService = Texto.Api.Services.IAuthorizationService;
 
@@ -20,7 +17,6 @@ namespace Texto.Api.Controllers
         private readonly IMessageService _messageService;
         private readonly IBusService _busService;
         private readonly IAuthorizationService _authorizationService;
-        private readonly IConfiguration _configuration;
         private readonly ILogger<TextController> _logger;
 
         public TextController(IConfiguration configuration, IMessageService messageService,
@@ -28,7 +24,6 @@ namespace Texto.Api.Controllers
             ILogger<TextController> logger)
         {
             _messageService = messageService;
-            _configuration = configuration;
             _busService = busService;
             _authorizationService = authorizationService;
             _logger = logger;
@@ -52,33 +47,11 @@ namespace Texto.Api.Controllers
 
         [Route("receive")]
         [HttpPost("{request}")]
-        public async Task<TwiMLResult> Receive(SmsRequest request)
+        [Authorize]
+        public async Task<IActionResult> Receive(SendMessageRequest request)
         {
-            var receivingKey = _configuration["Settings:ReceivingKey"];
-            if (Request.Query.ContainsKey("key"))
-            {
-                if (Request.Query["key"][0].Equals(receivingKey))
-                {
-                    var authorizedNumbers = _configuration.GetSection("AuthorizedNumbers:Numbers").Get<string[]>();
-
-                    if (authorizedNumbers.Contains(request.From))
-                    {
-                        var message = new
-                        {
-                            request.From,
-                            request.To,
-                            request.Body
-                        };
-                        await _busService.PublishAsync(message);
-                        return new TwiMLResult();
-                    }
-
-                    _logger.LogInformation($"Received message from unauthorized number {request.From} - Country: {request.FromCountry} - Message: {request.Body}");
-                }
-            }
-
-            _logger.LogWarning("Unauthorized receive request");
-            return new TwiMLResult("Error");
+            await _busService.PublishAsync(request);
+            return Ok();
         }
 
         [AllowAnonymous]

@@ -17,7 +17,9 @@ namespace Texto.Api.Services
 
         public Task PublishAsync<T>(T item)
         {
-            var queueClient = new QueueClient(_configuration["AzureBus:ConnectionString"], _configuration["AzureBus:QueueName"]);
+            var busConfigs = _configuration.GetSection("AzureBus");
+            var queueClient = new QueueClient(busConfigs["ConnectionString"], busConfigs["QueueName"]);
+
             return queueClient.SendAsync(new Message
             {
                 To = "textBrokers",
