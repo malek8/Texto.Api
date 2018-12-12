@@ -264,3 +264,4 @@ __pycache__/
 Texto.Api/appsettings.Development.json
 .env
 *.txt
+docker-compose.override.yml

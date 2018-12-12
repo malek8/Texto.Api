@@ -2,14 +2,13 @@ version: '3.4'
 
 services:
   texto.api:
-    image: ${DOCKER_REGISTRY}/texto.api
+    image: malekatwiz/texto.api
     build:
       context: .
       dockerfile: Texto.Api/Dockerfile
     ports:
       - "80"
     environment:
-      - DOCKER_REGISTRY
       - TwilioSettings__Sid
       - TwilioSettings__Token
       - AzureBus__ConnectionString

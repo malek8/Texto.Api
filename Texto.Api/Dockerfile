@@ -1,4 +1,14 @@
 FROM microsoft/dotnet:2.1-aspnetcore-runtime AS base
+
+LABEL author="Malek Atwiz" email="hello@malekatwiz.net"
+
+# Environment variables:
+	  #- TwilioSettings__Sid
+      #- TwilioSettings__Token
+      #- AzureBus__ConnectionString
+      #- AzureBus__QueueName
+      #- Authority
+
 WORKDIR /app
 EXPOSE 80
 

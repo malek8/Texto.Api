@@ -44,7 +44,7 @@ namespace Texto.Api.Controllers
         [Route("receive")]
         [HttpPost("{request}")]
         [Authorize]
-        public async Task<IActionResult> Receive(SendMessageRequest request)
+        public async Task<IActionResult> Receive([FromBody]SendMessageRequest request)
         {
             await _busService.PublishAsync(request);
             return Ok();
