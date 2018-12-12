@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.27703.2018
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.28407.52
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Texto.Api", "Texto.Api\Texto.Api.csproj", "{99487ACC-1ED7-4746-B82C-13665D96BA5A}"
 EndProject
@@ -10,6 +10,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{3EBC2D8B-27F4-4669-A1E0-4E75060D60E0}"
 	ProjectSection(SolutionItems) = preProject
 		.env = .env
+		docker-compose.override.yml = docker-compose.override.yml
 	EndProjectSection
 EndProject
 Global
