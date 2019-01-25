@@ -5,7 +5,7 @@
     <DockerTargetOS>Linux</DockerTargetOS>
     <ProjectGuid>6a0edfb4-1796-4fc3-9a84-60144be8ce05</ProjectGuid>
     <DockerLaunchAction>LaunchBrowser</DockerLaunchAction>
-    <DockerServiceUrl>{Scheme}://localhost:{ServicePort}/api/values</DockerServiceUrl>
+    <DockerServiceUrl>{Scheme}://localhost:{ServicePort}/api/status</DockerServiceUrl>
     <DockerServiceName>texto.api</DockerServiceName>
   </PropertyGroup>
   <ItemGroup>
