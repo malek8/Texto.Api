@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Texto.Api.Services;
 using Texto.Api.Models;
@@ -17,8 +16,7 @@ namespace Texto.Api.Controllers
         private readonly IBusService _busService;
         private readonly ILogger<TextController> _logger;
 
-        public TextController(IConfiguration configuration, IMessageService messageService,
-            IBusService busService, ILogger<TextController> logger)
+        public TextController(IMessageService messageService, IBusService busService, ILogger<TextController> logger)
         {
             _messageService = messageService;
             _busService = busService;
