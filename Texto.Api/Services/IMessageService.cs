@@ -4,6 +4,6 @@ namespace Texto.Api.Services
 {
     public interface IMessageService
     {
-        Task<string> Send(string fromNumber, string toNumber, string text);
+        Task<string> Send(string toNumber, string text);
     }
 }

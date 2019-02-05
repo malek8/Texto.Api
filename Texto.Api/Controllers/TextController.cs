@@ -16,9 +16,9 @@ namespace Texto.Api.Controllers
         private readonly IBusService _busService;
         private readonly ILogger<TextController> _logger;
 
-        public TextController(IMessageService messageService, IBusService busService, ILogger<TextController> logger)
+        public TextController(IMessageService service, IBusService busService, ILogger<TextController> logger)
         {
-            _messageService = messageService;
+            _messageService = service;
             _busService = busService;
             _logger = logger;
         }
@@ -28,7 +28,7 @@ namespace Texto.Api.Controllers
         [Authorize]
         public async Task<IActionResult> Send([FromBody]SendMessageRequest request)
         {
-            var messageSid = await _messageService.Send(request.FromNumber, request.ToNumber, request.Message);
+            var messageSid = await _messageService.Send(request.ToNumber, request.Message);
 
             if (string.IsNullOrEmpty(messageSid))
             {

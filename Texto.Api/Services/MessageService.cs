@@ -20,9 +20,10 @@ namespace Texto.Api.Services
             _logger = logger;
         }
 
-        public async Task<string> Send(string fromNumber, string toNumber, string text)
+        public async Task<string> Send(string toNumber, string text)
         {
             var twilioSettings = _configuration.GetSection("TwilioSettings");
+            var fromNumber = _configuration["SystemPhoneNumber1"];
             TwilioClient.Init(twilioSettings["Sid"], twilioSettings["Token"]);
 
             try
